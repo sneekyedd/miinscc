@@ -257,8 +257,8 @@ for (const w of o.walls) {
 }
 // the front door stays up even when its wall is lowered (you can see where Miis come in)
 assert.ok(!o.walls.some((w) => { let f = false; w.group.traverse((c) => { if (c === o.frontDoor) f = true; }); return f; }), "the front door isn't part of a wall that's lowered");
-// the starting view is from the front door's side (the right), looking in from high up
-assert.ok(Math.sin(o.cameraView.yaw) > 0.9 && o.cameraView.tilt > 1.2, "the camera starts on the front door's side, high up");
+// the starting view is square-on from the south (the front door on the right), looking in from high up
+assert.ok(Math.abs(o.cameraView.yaw) < 1e-9 && o.cameraView.tilt > 1.2, "the camera starts square-on from the south, high up");
 assert.ok(o.doorPoint.x > c("main").x, "the front door is on that side");
 
 // ---------- drawing: merged into a reasonable number of pieces ----------
