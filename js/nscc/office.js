@@ -1197,7 +1197,8 @@
 
     const doorPoint = { x: DOOR.x - 1.05, z: DOOR.z };
     const outsidePath = [{ x: DOOR.x + 0.95, z: DOOR.z }, { x: 12.9, z: DOOR.z + 1.2 }, { x: 12.9, z: HALL.z1 - 1.6 }];
-    // the starting view: from the front door's side (the right), high up, looking into the room
+    // the starting view: square-on from the south side (the small offices nearest, the front
+    // door on the right), high up, looking into the room
     const fit = { minX: FP.minX, maxX: FP.maxX, minZ: FP.minZ, maxZ: FP.maxZ };
     let doorK = 0, lastT = null;
     return {
@@ -1210,7 +1211,7 @@
       outsidePath,
       outsidePoint: outsidePath[outsidePath.length - 1],
       insidePoint: { x: 8.7, z: 4.7 },
-      cameraView: { target: [-0.4, 0.4, 0.3], yaw: Math.PI / 2 - 0.1, tilt: 1.6, fit, pan: { minX: FP.minX, maxX: FP.maxX, minZ: FP.minZ, maxZ: FP.maxZ } },
+      cameraView: { target: [-0.4, 0.4, 0.3], yaw: 0, tilt: 1.6, fit, pan: { minX: FP.minX, maxX: FP.maxX, minZ: FP.minZ, maxZ: FP.maxZ } },
       walls,     // [{ id, group, point, normal, setCut(k) }]: the outer walls (lowered while the camera is outside them)
       roomWalls, // [{ id, between, opaque }]: the walls inside the office (always up, solid)
       roomWallGroup: inner,
