@@ -1,5 +1,6 @@
 @echo off
-rem Starts MiiNSCC: quietly gets the latest version first, then opens it in your browser.
+rem Starts MiiNSCC: quietly gets the latest version first, then opens it in your browser
+rem at http://localhost:8765 (a tiny web server on this computer only: see serve.ps1).
 rem (Double-click this instead of index.html. If there's no internet, it just opens the copy you have.)
 rem (remember this folder first: Windows can lose track of it after changing folders)
 set "HERE=%~dp0"
@@ -21,4 +22,7 @@ if errorlevel 1 goto pull
 :pull
 "%GIT%" pull --ff-only --quiet >nul 2>nul
 :open
-start "" "%HERE%index.html"
+rem the little web server (a minimized window: close it to stop MiiNSCC), then the browser
+start "MiiNSCC server" /min powershell -NoProfile -ExecutionPolicy Bypass -File "%HERE%serve.ps1"
+timeout /t 2 /nobreak >nul
+start "" http://localhost:8765/

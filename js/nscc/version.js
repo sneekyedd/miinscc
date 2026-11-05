@@ -8,9 +8,10 @@
  * (Keep the part between the two markers plain JSON: the update check reads it as JSON.)
  */
 window.NSCC_VERSION = /*JSON*/{
-  "version": "0.4.2",
+  "version": "0.4.3",
   "date": "2026-10-29",
   "notes": [
+    "0.4.3: Start MiiNSCC now opens it at http://localhost:8765 (a tiny web server on your computer only, nothing to install), ready for the office server later.",
     "0.4.2: MiiNSCC has its own home on GitHub now (github.com/sneekyedd/miinscc). Copies opened with Start MiiNSCC switch over by themselves.",
     "0.4.1: Opening is sturdier: no step can get stuck any more, and if something does go wrong, the loading screen says what happened instead of loading forever.",
     "0.4.0: The office now has the real shape of our office, taken from the 3D model of it: the walls, doors, windows and the support columns are where they really are, with a clean, solid floor. Move the camera any way you like: drag to turn it, use the right mouse button (or two fingers) to slide it, and the wheel to zoom; it never loses the office. Center the office looks in from the front door's side. Only the outside walls in the way are lowered; the walls inside the office stay solid (you look into the server room from above).",

@@ -40,10 +40,18 @@
 
   // The command that gets the update and opens it, for this computer (worked out from where
   // this page was opened). Windows: the launcher (it finds Git itself); Mac/Linux: start-miinscc.sh.
+  // (opened from the little localhost server that Start MiiNSCC runs: it says which folder it serves)
+  let servedFrom = null;
+  const loc0 = root.location || {};
+  if (/^https?:$/.test(loc0.protocol) && /^(localhost|127\.0\.0\.1)$/.test(loc0.hostname) && root.fetch) {
+    fetch("/__nscc/folder", { cache: "no-store" }).then((r) => (r.ok ? r.json() : null)).then((j) => { if (j && j.folder) servedFrom = j; }).catch(() => {});
+  }
   function updateCommand() {
     const loc = root.location || {};
-    if (loc.protocol !== "file:") return null; // (served by a server: reopening the page is enough)
-    let dir = decodeURIComponent(loc.pathname || "").replace(/\/[^/]*$/, "");
+    let dir;
+    if (servedFrom) dir = servedFrom.folder.replace(/\\/g, "/").replace(/\/+$/, "").replace(/^([A-Za-z]):/, "/$1:");
+    else if (loc.protocol === "file:") dir = decodeURIComponent(loc.pathname || "").replace(/\/[^/]*$/, "");
+    else return null; // (served by a real server: reopening the page is enough)
     if (/^\/[A-Za-z]:\//.test(dir)) { // Windows: /C:/Users/... -> C:\Users\...
       dir = dir.slice(1).replace(/\//g, "\\");
       return { os: "Windows", where: "Command Prompt", cmd: '"' + dir + '\\Start MiiNSCC.bat"' };

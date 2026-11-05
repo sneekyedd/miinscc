@@ -30,9 +30,15 @@ anyone's own computer too. It's a plain website: no app to install, no server (y
 Any of these work:
 
 - **Best: double-click `Start MiiNSCC.bat`** (Windows) or `start-miinscc.sh` (Mac/Linux).
-  It quietly downloads the newest version first (no questions asked), then opens MiiNSCC
-  in your browser. This needs the folder to have been downloaded with `git clone`; with no
-  internet it just opens the copy you have.
+  It quietly downloads the newest version first (no questions asked), starts a tiny web
+  server on this computer only and opens **http://localhost:8765** in your browser.
+  - Windows uses `serve.ps1` (built-in PowerShell, nothing to install). It runs in a minimized
+    window called "MiiNSCC server": close that window to stop it.
+  - Mac/Linux uses `serve.py` (Python 3, which comes with Git's developer tools on a Mac).
+    Stop it with `./start-miinscc.sh stop`.
+  - Only this computer can reach it, and it only hands out the files in this folder.
+  Updating needs the folder to have been downloaded with `git clone`; with no internet it
+  just opens the copy you have.
 - **Just open it:** double-click `index.html` (it opens in your web browser, but doesn't update itself).
 - **Small local web server** (from this folder):
   - `npx serve` and open the address it prints, or
