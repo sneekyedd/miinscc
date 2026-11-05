@@ -176,7 +176,10 @@ for (const w of plan.outer.concat(plan.inner)) {
 const dPlan = plan.inner.find((w) => w.id === "workbench").open.find((x) => x.room === "D");
 assert.ok(faces.some((f) => f.axis === "x" && f.at > 117 && f.at < 124 && f.u0 <= dPlan.a + 1 && f.u1 >= dPlan.b - 1 && f.z1 < 100), "the model has D's door there");
 const fPlan = plan.outer.find((w) => w.id === "hallway").open.find((x) => x.kind === "front-door");
-for (const e of [fPlan.a, fPlan.b]) assert.ok(faces.some((f) => f.axis === "y" && Math.abs(f.at - e) < 2.5 && f.u0 > 249 && f.u1 < 259), "the model has the front door's frame at y " + e);
+// (the model's frame is one door wide; the real opening is about 2.5 doors wide, around the same middle)
+for (const e of [101, 137]) assert.ok(faces.some((f) => f.axis === "y" && Math.abs(f.at - e) < 2.5 && f.u0 > 249 && f.u1 < 259), "the model has the front door's frame at y " + e);
+assert.ok(fPlan.a < 101 && fPlan.b > 137 && Math.abs((fPlan.a + fPlan.b) / 2 - 119) < 1, "the front door is around the model's frame");
+assert.ok(Math.abs((fPlan.b - fPlan.a) - 2.5 * 36) < 4, "the front door is about 2.5 doors (90 inches) wide");
 // the slanted shards and floor holes in the model are not copied
 assert.ok(measure.shards(T).length > 10, "(the model does have shards)");
 
