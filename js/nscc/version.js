@@ -8,9 +8,10 @@
  * (Keep the part between the two markers plain JSON: the update check reads it as JSON.)
  */
 window.NSCC_VERSION = /*JSON*/{
-  "version": "0.4.3",
-  "date": "2026-10-29",
+  "version": "0.5.0",
+  "date": "2026-11-05",
   "notes": [
+    "0.5.0: MiiNSCC now looks like the NSCC website: its green, gold and orange, square buttons and similar fonts. Center the office now looks straight at the office instead of at a slant. The hallway is open like the real one (no wall along it, no arrow on the floor), and the front door is a pair of doors standing open.",
     "0.4.3: Start MiiNSCC now opens it at http://localhost:8765 (a tiny web server on your computer only, nothing to install), ready for the office server later.",
     "0.4.2: MiiNSCC has its own home on GitHub now (github.com/sneekyedd/miinscc). Copies opened with Start MiiNSCC switch over by themselves.",
     "0.4.1: Opening is sturdier: no step can get stuck any more, and if something does go wrong, the loading screen says what happened instead of loading forever.",
