@@ -834,7 +834,7 @@
     for (const e of [fdo.u0, fdo.u1]) slab(frontDoor, 0xffffff, DOOR.x, DOOR.h / 2, e, HW.t + 0.1, DOOR.h, 0.14);
     slab(frontDoor, 0xffffff, DOOR.x, DOOR.h + 0.06, DOOR.z, HW.t + 0.1, 0.14, DOOR.w + 0.28);
     // double doors: they fill the doorway (meeting in the middle) and both swing open into the
-    // hallway while someone is going through (one hangs on each side of the doorway)
+    // hallway while anyone is in the office (one hangs on each side of the doorway)
     const LW = DOOR.w / 2 - 0.1;
     const leaves = [];
     for (const side of [1, -1]) { // (+1 hangs on the far end, -1 on the near end)
@@ -1221,7 +1221,7 @@
         const dt = lastT === null ? 0 : Math.max(0, Math.min(0.25, t - lastT));
         lastT = t;
         anim.forEach((a) => a(t, info));
-        // the front doors swing open (into the hallway) while someone is going through them
+        // the front doors swing open (into the hallway) while info.door: anyone is in the office
         const want = info && info.door ? 1 : 0;
         doorK = info && info.reduced ? want : doorK + (want - doorK) * (1 - Math.exp(-dt * 7));
         for (const h of leaves) h.rotation.y = -h.userData.side * doorK * 1.45;

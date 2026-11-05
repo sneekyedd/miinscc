@@ -8,9 +8,10 @@
  * (Keep the part between the two markers plain JSON: the update check reads it as JSON.)
  */
 window.NSCC_VERSION = /*JSON*/{
-  "version": "0.5.2",
+  "version": "0.5.3",
   "date": "2026-11-05",
   "notes": [
+    "0.5.3: The front doors stay open while anyone is in the office, and close when the last person has gone.",
     "0.5.2: The front entrance has just its two doors now: they fill the doorway and swing open into the hallway when someone walks through. The extra door that was beside them is gone.",
     "0.5.1: The front entrance is as wide as the real one (about two and a half doors), with bigger double doors standing open into the hallway.",
     "0.5.0: MiiNSCC now looks like the NSCC website: its green, gold and orange, square buttons and similar fonts. Center the office now looks straight at the office instead of at a slant. The hallway is open like the real one (no wall along it, no arrow on the floor), and the front door is a pair of doors standing open.",
