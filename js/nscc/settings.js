@@ -2,7 +2,7 @@
  * settings.js
  * The ⚙️ Settings window: the version, "Check for updates", music on/off and graphics quality.
  *
- * Updates: the newest version lives on GitHub (the miinscc branch). Checking reads its
+ * Updates: the newest version lives on GitHub (github.com/sneekyedd/miinscc, main branch). Checking reads its
  * version.js and compares. A page opened from a file can't replace its own files, so the
  * update itself is fetched by the launcher (Start MiiNSCC.bat / start-miinscc.sh) the next
  * time MiiNSCC is opened. (Once it's served by the office server, reopening the page is enough.)
@@ -10,7 +10,7 @@
 (function (root) {
   "use strict";
 
-  const LATEST_URL = "https://raw.githubusercontent.com/sneekyedd/mii-hub/miinscc/js/nscc/version.js";
+  const LATEST_URL = "https://raw.githubusercontent.com/sneekyedd/miinscc/main/js/nscc/version.js";
   const PREFS_KEY = "miinscc-settings";
   const QUALITY_NAMES = { auto: "Auto", high: "High", medium: "Medium", low: "Low" };
 

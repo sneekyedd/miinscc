@@ -10,5 +10,15 @@ where git >nul 2>nul || set "GIT="
 if not defined GIT if exist "%ProgramFiles%\Git\cmd\git.exe" set "GIT=%ProgramFiles%\Git\cmd\git.exe"
 if not defined GIT if exist "%ProgramFiles(x86)%\Git\cmd\git.exe" set "GIT=%ProgramFiles(x86)%\Git\cmd\git.exe"
 if not defined GIT if exist "%LocalAppData%\Programs\Git\cmd\git.exe" set "GIT=%LocalAppData%\Programs\Git\cmd\git.exe"
-if defined GIT "%GIT%" pull --ff-only --quiet >nul 2>nul
+if not defined GIT goto open
+rem MiiNSCC moved to its own repository (github.com/sneekyedd/miinscc): switch this copy over
+rem once, by itself. It's the same history, so nothing is lost.
+"%GIT%" remote get-url origin 2>nul | findstr /i /c:"sneekyedd/mii-hub" >nul
+if errorlevel 1 goto pull
+"%GIT%" remote set-url origin https://github.com/sneekyedd/miinscc.git
+"%GIT%" fetch --quiet origin main >nul 2>nul
+"%GIT%" checkout --quiet -B main origin/main >nul 2>nul
+:pull
+"%GIT%" pull --ff-only --quiet >nul 2>nul
+:open
 start "" "%HERE%index.html"

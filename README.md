@@ -16,6 +16,15 @@ day. Tomorrow, everyone adds their Mii again with one click (it remembers them).
 It's made to be shown on a TV in the office (big, easy to read), and to be opened on
 anyone's own computer too. It's a plain website: no app to install, no server (yet).
 
+## Get it
+
+- **Download (doesn't update itself):** https://github.com/sneekyedd/miinscc/archive/refs/heads/main.zip
+- **Updates itself (recommended):** install Git, then
+  - Windows (Command Prompt): `git clone https://github.com/sneekyedd/miinscc.git MiiNSCC`
+  - Mac / Linux (Terminal): `git clone https://github.com/sneekyedd/miinscc.git ~/MiiNSCC`
+
+  and open it with `Start MiiNSCC.bat` / `start-miinscc.sh` in that folder.
+
 ## Run it
 
 Any of these work:
