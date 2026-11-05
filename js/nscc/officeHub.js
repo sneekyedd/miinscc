@@ -629,7 +629,9 @@
       this.runChats(dt);
       this.runMeetings(dt);
       const d = this.office.doorPoint;
-      let door = false;
+      // the front doors stay open while anyone is in the office (or on the way in or out),
+      // and close when the last one has gone
+      let door = this.walkers.length > 0;
       for (const w of this.walkers.slice()) {
         w.appear = Math.min(1, w.appear + dt * 1.8);
         if (w.bubble) { w.bubble.time += dt; if (w.bubble.time > w.bubble.dur) { w.bubble = null; w.uiBubble.classList.remove("show"); } }
