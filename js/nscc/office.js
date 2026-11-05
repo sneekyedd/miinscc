@@ -27,7 +27,8 @@
  * again from them with clean, simple shapes: straight walls, a solid floor, the columns.
  * What the model had that's left out: slanted shards sticking out of the walls and floor,
  * and holes in the floor. What's added that the model doesn't have: the front wall (the
- * model is open at the front), and the hallway's floor and outer wall. 1 unit here = 24
+ * model is open at the front), and the hallway's floor (the hallway has no outer wall: it carries on past the office,
+ * like the real one). 1 unit here = 24
  * inches (2 feet), so the Miis and desks keep the size they always had.
  * To update it from a new model: see "The office's 3D model" in README.md.
  *
@@ -400,7 +401,7 @@
         open: [{ a: 311, b: 335, kind: "window" }, { a: 383, b: 407, kind: "window" }] },
       { id: "back", axis: "x", t: [537, 549], from: -357, to: 362, room: -1,
         open: [{ a: -223, b: -199, kind: "window" }, { a: -151, b: -127, kind: "window" }, { a: 129, b: 153, kind: "window" }, { a: 201, b: 225, kind: "window" }] },
-      { id: "east", axis: "y", t: [362, 367], from: -179, to: 549, room: -1, model: [169, 549] }, // (the hallway's part is added)
+      { id: "east", axis: "y", t: [362, 367], from: 169, to: 549, room: -1 }, // (E's wall; the hallway has none: it carries on)
       { id: "front", axis: "x", t: [-179, -173], from: -357, to: 251.5, room: 1, added: true },    // (the model is open at the front)
       // the wall between the office and the hallway: A's side wall, then glass and the two doors
       { id: "hallway", axis: "y", t: [251.5, 256.8], from: -179, to: 177, room: -1,
@@ -790,7 +791,7 @@
     top.add(inner);
 
     // things on the outer walls
-    const backW = outer.back.g, westW = outer.west.g, eastW = outer.east.g;
+    const backW = outer.back.g, westW = outer.west.g;
     // the big "A223 Information Technology" sign on the back wall
     const bigSign = canvasTexture(640, 220, (ctx, w, h) => {
       ctx.fillStyle = "#24603b"; roundRect(ctx, 6, 6, w - 12, h - 12, 40); ctx.fill();
@@ -830,11 +831,6 @@
       minHand.rotation.z = -(m / 60) * TAU;
       hourHand.rotation.z = -(h / 12) * TAU;
     });
-    // a notice board in the hallway
-    block(eastW, 0xb27a48, Rt - 0.05, 2.3, 6.0, 0.1, 1.5, 2.6, 0.04);
-    block(eastW, 0xe9c99a, Rt - 0.09, 2.3, 6.0, 0.08, 1.3, 2.4, 0.03);
-    for (let i = 0; i < 5; i++) block(eastW, [0xfff176, 0xff9ec7, 0x9fe3ff, 0xffffff, 0xc5f08a][i], Rt - 0.14, 2.0 + (i % 2) * 0.5, 5.1 + i * 0.45, 0.02, 0.4, 0.34, 0.01, { rx: (i - 2) * 0.08 });
-
     // ----- THE FRONT DOOR: from the hallway into the open office -----
     // (it stays up even while its wall is lowered, so you can always see where Miis come in)
     const HW = outer.hallway.w;
@@ -845,15 +841,20 @@
     top.add(frontDoor);
     for (const e of [fdo.u0, fdo.u1]) slab(frontDoor, 0xffffff, DOOR.x, DOOR.h / 2, e, HW.t + 0.1, DOOR.h, 0.14);
     slab(frontDoor, 0xffffff, DOOR.x, DOOR.h + 0.06, DOOR.z, HW.t + 0.1, 0.14, DOOR.w + 0.28);
-    const hinge = dynamic(new THREE.Group());
-    hinge.position.set(DOOR.x, 0, fdo.u1 - 0.07);
-    frontDoor.add(hinge);
-    const LW = DOOR.w - 0.14;
-    block(hinge, 0x2f9e5b, 0, DOOR.h / 2, -LW / 2, 0.14, DOOR.h - 0.06, LW, 0.06);
-    block(hinge, 0xc8f5d6, -0.08, DOOR.h * 0.68, -LW / 2, 0.03, DOOR.h * 0.26, LW * 0.55, 0.02);
-    block(hinge, 0xc8f5d6, 0.08, DOOR.h * 0.68, -LW / 2, 0.03, DOOR.h * 0.26, LW * 0.55, 0.02);
-    for (const e of [-1, 1]) ball(hinge, 0xffcf3a, e * 0.12, DOOR.h * 0.42, -LW + 0.25, 0.09);
-    mergeStatic(hinge);
+    // double doors, standing wide open into the hallway (one hangs on each side of the doorway)
+    const LW = DOOR.w / 2 - 0.1;
+    for (const side of [1, -1]) { // (+1 hangs on the far end, -1 on the near end)
+      const hinge = new THREE.Group();
+      hinge.position.set(DOOR.x, 0, (side > 0 ? fdo.u1 : fdo.u0) - side * 0.07);
+      hinge.rotation.y = side * 1.45; // (swung open, out into the hallway)
+      frontDoor.add(hinge);
+      const m = -side * LW / 2; // (the middle of the leaf, from its hinge)
+      block(hinge, 0x2f9e5b, 0, DOOR.h / 2, m, 0.14, DOOR.h - 0.06, LW, 0.06);
+      block(hinge, 0xc8f5d6, -0.08, DOOR.h * 0.68, m, 0.03, DOOR.h * 0.26, LW * 0.55, 0.02);
+      block(hinge, 0xc8f5d6, 0.08, DOOR.h * 0.68, m, 0.03, DOOR.h * 0.26, LW * 0.55, 0.02);
+      for (const e of [-1, 1]) ball(hinge, 0xffcf3a, e * 0.12, DOOR.h * 0.42, -side * (LW - 0.15), 0.09);
+      mergeStatic(hinge);
+    }
     const exitTex = canvasTexture(512, 160, (ctx, w, h) => {
       ctx.fillStyle = "#1f7a45"; roundRect(ctx, 4, 4, w - 8, h - 8, 30); ctx.fill();
       ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
@@ -873,14 +874,9 @@
       ctx.fillText("WELCOME", w / 2, h / 2 + 2);
     });
     put(top, new THREE.PlaneGeometry(2.2, 1.1), toon(0xffffff, { map: matTex }), { x: DOOR.x - 0.85, y: 0.03, z: DOOR.z, rx: -Math.PI / 2, rz: Math.PI / 2, shadow: false });
-    // the hallway: plants, a bench, and an arrow to the office
+    // the hallway: plants and a bench
     plant(top, 14.5, 14.6, 0.75); plant(top, 14.5, 1.3, 0.7);
     block(top, 0x7a8597, 14.6, 0.45, 9.0, 0.6, 0.12, 2.0, 0.04); block(top, 0x5f6a7c, 14.6, 0.2, 8.2, 0.5, 0.4, 0.1, 0.02); block(top, 0x5f6a7c, 14.6, 0.2, 9.8, 0.5, 0.4, 0.1, 0.02);
-    const arrowTex = canvasTexture(256, 128, (ctx) => {
-      ctx.fillStyle = "rgba(47,158,91,0.85)";
-      ctx.beginPath(); ctx.moveTo(30, 44); ctx.lineTo(150, 44); ctx.lineTo(150, 14); ctx.lineTo(226, 64); ctx.lineTo(150, 114); ctx.lineTo(150, 84); ctx.lineTo(30, 84); ctx.closePath(); ctx.fill();
-    });
-    put(top, new THREE.PlaneGeometry(2.0, 1.0), new THREE.MeshBasicMaterial({ map: arrowTex, transparent: true, depthWrite: false, toneMapped: false }), { x: 12.9, y: 0.03, z: 6.5, rx: -Math.PI / 2, rz: Math.PI / 2, shadow: false });
 
     // ----- the open office desks (from the owner's desk plan) -----
     // yaw = the way the person sitting there looks: 0 = toward the front (down on the plan),
@@ -1200,7 +1196,7 @@
     // the starting view: square-on from the south side (the small offices nearest, the front
     // door on the right), high up, looking into the room
     const fit = { minX: FP.minX, maxX: FP.maxX, minZ: FP.minZ, maxZ: FP.maxZ };
-    let doorK = 0, lastT = null;
+    let lastT = null;
     return {
       root: top,
       bounds: B,
@@ -1231,10 +1227,6 @@
         lastT = t;
         anim.forEach((a) => a(t, info));
         const instant = !!(info && info.reduced);
-        // the front door swings open (into the hallway) while someone is going through it
-        const want = info && info.door ? 1 : 0;
-        doorK = instant ? want : doorK + (want - doorK) * (1 - Math.exp(-dt * 7));
-        hinge.rotation.y = -doorK * 1.5;
         // a room door opens when someone is near it (walking through), and closes after
         const people = (info && info.people) || [];
         for (const d of doors) {
