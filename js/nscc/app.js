@@ -21,7 +21,7 @@
 
   // (nothing at startup may hang: each step gives up after a moment and carries on)
   const atMost = (ms, p) => Promise.race([p, new Promise((res) => setTimeout(res, ms))]);
-  try { await atMost(2000, Promise.all(["400", "700", "800"].map((w) => document.fonts.load(w + " 20px Nunito")))); } catch (e) { /* optional */ }
+  try { await atMost(2000, Promise.all(["400 20px \"Source Sans 3\"", "700 20px \"Source Sans 3\"", "600 20px \"Fira Sans\"", "700 20px \"Fira Sans\"", "800 20px \"Fira Sans\""].map((f) => document.fonts.load(f)))); } catch (e) { /* optional */ }
 
   // The time. For trying things out, the page can pretend it's another time:
   // index.html?now=2026-10-28T17:59:30 (or window.miinscc.setTime(...) in the console).

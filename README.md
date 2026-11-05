@@ -214,5 +214,5 @@ front door opens onto the hallway, the desk plan), and that the Miis only make f
 
 ## Thanks
 
-3D library: [three.js](https://threejs.org) (MIT, in `js/vendor`). Font: Nunito (SIL Open
-Font License, in `fonts`). Mii models come from Mii Creator.
+3D library: [three.js](https://threejs.org) (MIT, in `js/vendor`). Fonts: Fira Sans and Source Sans 3
+(SIL Open Font License, in `fonts`), picked as free look-alikes of the NSCC website's fonts. Mii models come from Mii Creator.

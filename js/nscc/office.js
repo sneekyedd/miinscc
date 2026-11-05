@@ -172,7 +172,7 @@
   }
   function fitText(ctx, text, maxW, size, weight) {
     let s = size;
-    do { ctx.font = (weight || 800) + " " + s + "px Nunito, sans-serif"; s -= 2; } while (s > 10 && ctx.measureText(text).width > maxW);
+    do { ctx.font = (weight || 800) + " " + s + "px \"Fira Sans\", sans-serif"; s -= 2; } while (s > 10 && ctx.measureText(text).width > maxW);
   }
   // A flat picture readable from both sides (signs hanging in a doorway).
   function twoSided(parent, mat, w, h, x, y, z, ry) {
@@ -245,7 +245,7 @@
       ctx.fillStyle = owner ? "rgba(255,247,214,0.97)" : "rgba(255,255,255,0.94)";
       roundRect(ctx, 2, 2, w - 4, h - 4, 18); ctx.fill();
       ctx.strokeStyle = owner ? "#e0a92e" : "#8fbf9c"; ctx.lineWidth = 3; ctx.stroke();
-      ctx.fillStyle = "#24603b"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillStyle = "#00703c"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       const text = owner ? number + " · " + owner : String(number);
       fitText(ctx, text, w - 24, 40);
       ctx.fillText(text, w / 2, h / 2 + 2);
@@ -438,7 +438,7 @@
   const IN = PLAN.inchesPerUnit;
   const wx = (x) => (x - PLAN.center.x) / IN, wz = (y) => (PLAN.center.y - y) / IN, ins = (v) => v / IN;
   const WALL_H = ins(PLAN.topZ - PLAN.floorZ), DOOR_H = ins(PLAN.doorHead), CUT_H = 0.3;
-  const WALL_C = 0xeef5ea, OUTER_C = 0xe3f1e0, PANEL_C = 0x4f9a6a, CAP_C = 0x2f6f4a, COLUMN_C = 0xf3f1e6, PANEL_H = 1.0;
+  const WALL_C = 0xeef5ea, OUTER_C = 0xe3f1e0, PANEL_C = 0x2e8a57, CAP_C = 0x00703c, COLUMN_C = 0xf3f1e6, PANEL_H = 1.0;
 
   // A wall from PLAN, in the office's units: c = its middle line, t = how thick, u0..u1 = along it.
   function worldRun(def) {
@@ -557,7 +557,7 @@
       ctx.fillStyle = color; roundRect(ctx, 4, 4, cw - 8, ch - 8, 34); ctx.fill();
       ctx.fillStyle = "#ffffff"; roundRect(ctx, 18, 18, 124, ch - 36, 24); ctx.fill();
       ctx.fillStyle = color; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.font = "800 96px Nunito, sans-serif"; ctx.fillText(letter, 80, ch / 2 + 6);
+      ctx.font = "800 96px \"Fira Sans\", sans-serif"; ctx.fillText(letter, 80, ch / 2 + 6);
       ctx.fillStyle = "#ffffff"; ctx.textAlign = "left";
       if (owner) {
         fitText(ctx, name, cw - 190, 38, 700); ctx.fillText(name, 162, ch / 2 - 26);
@@ -794,11 +794,11 @@
     const backW = outer.back.g, westW = outer.west.g;
     // the big "A223 Information Technology" sign on the back wall
     const bigSign = canvasTexture(640, 220, (ctx, w, h) => {
-      ctx.fillStyle = "#24603b"; roundRect(ctx, 6, 6, w - 12, h - 12, 40); ctx.fill();
-      ctx.strokeStyle = "#ffcf3a"; ctx.lineWidth = 8; roundRect(ctx, 20, 20, w - 40, h - 40, 30); ctx.stroke();
+      ctx.fillStyle = "#00703c"; roundRect(ctx, 6, 6, w - 12, h - 12, 40); ctx.fill();
+      ctx.strokeStyle = "#f5b31b"; ctx.lineWidth = 8; roundRect(ctx, 20, 20, w - 40, h - 40, 30); ctx.stroke();
       ctx.fillStyle = "#ffffff"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.font = "800 104px Nunito, sans-serif"; ctx.fillText("A223", w / 2, 82);
-      ctx.font = "800 50px Nunito, sans-serif"; ctx.fillText("Information Technology", w / 2, 160);
+      ctx.font = "800 104px \"Fira Sans\", sans-serif"; ctx.fillText("A223", w / 2, 82);
+      ctx.font = "800 50px \"Fira Sans\", sans-serif"; ctx.fillText("Information Technology", w / 2, 160);
     });
     put(backW, new THREE.PlaneGeometry(4.6, 1.58), new THREE.MeshBasicMaterial({ map: bigSign, toneMapped: false }), { x: -1.1, y: 3.0, z: BK + 0.04, shadow: false });
     // a whiteboard on the left wall
@@ -856,10 +856,10 @@
       mergeStatic(hinge);
     }
     const exitTex = canvasTexture(512, 160, (ctx, w, h) => {
-      ctx.fillStyle = "#1f7a45"; roundRect(ctx, 4, 4, w - 8, h - 8, 30); ctx.fill();
+      ctx.fillStyle = "#00703c"; roundRect(ctx, 4, 4, w - 8, h - 8, 30); ctx.fill();
       ctx.fillStyle = "#fff"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.font = "800 62px Nunito, sans-serif"; ctx.fillText("FRONT DOOR", w / 2, 58);
-      ctx.font = "800 40px Nunito, sans-serif"; ctx.fillText("IN  ·  OUT", w / 2, 118);
+      ctx.font = "800 62px \"Fira Sans\", sans-serif"; ctx.fillText("FRONT DOOR", w / 2, 58);
+      ctx.font = "800 40px \"Fira Sans\", sans-serif"; ctx.fillText("IN  ·  OUT", w / 2, 118);
     });
     const exitMat = new THREE.MeshBasicMaterial({ map: exitTex, toneMapped: false });
     // the sign sits on top of the door frame, readable from the hallway and from the room
@@ -868,9 +868,9 @@
     put(frontDoor, new THREE.PlaneGeometry(1.95, 0.62), exitMat, { x: DOOR.x + 0.065, y: SY, z: DOOR.z, ry: Math.PI / 2, shadow: false });
     put(frontDoor, new THREE.PlaneGeometry(1.95, 0.62), exitMat, { x: DOOR.x - 0.065, y: SY, z: DOOR.z, ry: -Math.PI / 2, shadow: false });
     const matTex = canvasTexture(256, 112, (ctx, w, h) => {
-      ctx.fillStyle = "#2f7a4e"; ctx.fillRect(0, 0, w, h);
-      ctx.strokeStyle = "#ffcf3a"; ctx.lineWidth = 6; ctx.strokeRect(8, 8, w - 16, h - 16);
-      ctx.fillStyle = "#fff"; ctx.font = "800 40px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillStyle = "#00703c"; ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "#f5b31b"; ctx.lineWidth = 6; ctx.strokeRect(8, 8, w - 16, h - 16);
+      ctx.fillStyle = "#fff"; ctx.font = "800 40px \"Fira Sans\", sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.fillText("WELCOME", w / 2, h / 2 + 2);
     });
     put(top, new THREE.PlaneGeometry(2.2, 1.1), toon(0xffffff, { map: matTex }), { x: DOOR.x - 0.85, y: 0.03, z: DOOR.z, rx: -Math.PI / 2, rz: Math.PI / 2, shadow: false });
@@ -1032,7 +1032,7 @@
     const slide = canvasTexture(256, 144, (ctx, w, h) => {
       ctx.fillStyle = "#eefaf1"; ctx.fillRect(0, 0, w, h);
       ctx.fillStyle = "#2e8f86"; ctx.fillRect(0, 0, w, 26);
-      ctx.fillStyle = "#fff"; ctx.font = "800 18px Nunito, sans-serif"; ctx.fillText("Weekly plan", 10, 19);
+      ctx.fillStyle = "#fff"; ctx.font = "800 18px \"Fira Sans\", sans-serif"; ctx.fillText("Weekly plan", 10, 19);
       [40, 70, 55, 90].forEach((b, i) => { ctx.fillStyle = ["#ff7a59", "#ffc94a", "#5cc84a", "#4a90e2"][i]; ctx.fillRect(130 + i * 28, h - 12 - b, 20, b); });
       ctx.fillStyle = "#9aa8bd"; for (let i = 0; i < 4; i++) ctx.fillRect(12, 42 + i * 20, 90, 6);
     });
@@ -1215,7 +1215,7 @@
       floor,
       frontDoor,
       plan: PLAN,
-      background: 0xdff3e4,
+      background: 0xe8edea, // (a light grey-green, like the NSCC website's light grey)
       setOwner(spotId, name) {
         if (badges[spotId]) badges[spotId].redraw(name || null);
         const room = /^office-(\w+)$/.exec(spotId);
