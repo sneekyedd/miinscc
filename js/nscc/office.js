@@ -405,7 +405,9 @@
       { id: "front", axis: "x", t: [-179, -173], from: -357, to: 251.5, room: 1, added: true },    // (the model is open at the front)
       // the wall between the office and the hallway: A's side wall, then glass and the two doors
       { id: "hallway", axis: "y", t: [251.5, 256.8], from: -179, to: 177, room: -1,
-        open: [{ a: -9.4, b: 22.5, kind: "closed-door" }, { a: 24.6, b: 100.6, kind: "glass" }, { a: 101, b: 137, kind: "front-door" }, { a: 138.6, b: 176.6, kind: "glass" }] },
+        open: [{ a: -9.4, b: 22.5, kind: "closed-door" }, { a: 24.6, b: 72.6, kind: "glass" }, { a: 74, b: 164, kind: "front-door" }, { a: 165.6, b: 176.6, kind: "glass" }] },
+    // (the front door: the model's frame is one door wide (101..137), but the real opening is
+    // about two and a half doors wide (90 inches), so it's built that wide, around the same middle)
     ],
     inner: [
       // (the workbench wall: the main room | E and D; D's door is in it, past the end of the workbench)
@@ -846,7 +848,7 @@
     for (const side of [1, -1]) { // (+1 hangs on the far end, -1 on the near end)
       const hinge = new THREE.Group();
       hinge.position.set(DOOR.x, 0, (side > 0 ? fdo.u1 : fdo.u0) - side * 0.07);
-      hinge.rotation.y = side * 1.45; // (swung open, out into the hallway)
+      hinge.rotation.y = -side * 1.45; // (swung open, out into the hallway)
       frontDoor.add(hinge);
       const m = -side * LW / 2; // (the middle of the leaf, from its hinge)
       block(hinge, 0x2f9e5b, 0, DOOR.h / 2, m, 0.14, DOOR.h - 0.06, LW, 0.06);
@@ -864,16 +866,16 @@
     const exitMat = new THREE.MeshBasicMaterial({ map: exitTex, toneMapped: false });
     // the sign sits on top of the door frame, readable from the hallway and from the room
     const SY = DOOR.h + 0.5;
-    block(frontDoor, 0xffffff, DOOR.x, SY, DOOR.z, 0.12, 0.72, 2.05, 0.03);
-    put(frontDoor, new THREE.PlaneGeometry(1.95, 0.62), exitMat, { x: DOOR.x + 0.065, y: SY, z: DOOR.z, ry: Math.PI / 2, shadow: false });
-    put(frontDoor, new THREE.PlaneGeometry(1.95, 0.62), exitMat, { x: DOOR.x - 0.065, y: SY, z: DOOR.z, ry: -Math.PI / 2, shadow: false });
+    block(frontDoor, 0xffffff, DOOR.x, SY, DOOR.z, 0.12, 0.82, 2.4, 0.03);
+    put(frontDoor, new THREE.PlaneGeometry(2.3, 0.72), exitMat, { x: DOOR.x + 0.065, y: SY, z: DOOR.z, ry: Math.PI / 2, shadow: false });
+    put(frontDoor, new THREE.PlaneGeometry(2.3, 0.72), exitMat, { x: DOOR.x - 0.065, y: SY, z: DOOR.z, ry: -Math.PI / 2, shadow: false });
     const matTex = canvasTexture(256, 112, (ctx, w, h) => {
       ctx.fillStyle = "#00703c"; ctx.fillRect(0, 0, w, h);
       ctx.strokeStyle = "#f5b31b"; ctx.lineWidth = 6; ctx.strokeRect(8, 8, w - 16, h - 16);
       ctx.fillStyle = "#fff"; ctx.font = "800 40px \"Fira Sans\", sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
       ctx.fillText("WELCOME", w / 2, h / 2 + 2);
     });
-    put(top, new THREE.PlaneGeometry(2.2, 1.1), toon(0xffffff, { map: matTex }), { x: DOOR.x - 0.85, y: 0.03, z: DOOR.z, rx: -Math.PI / 2, rz: Math.PI / 2, shadow: false });
+    put(top, new THREE.PlaneGeometry(3.0, 1.5), toon(0xffffff, { map: matTex }), { x: DOOR.x - 1.05, y: 0.03, z: DOOR.z, rx: -Math.PI / 2, rz: Math.PI / 2, shadow: false });
     // the hallway: plants and a bench
     plant(top, 14.5, 14.6, 0.75); plant(top, 14.5, 1.3, 0.7);
     block(top, 0x7a8597, 14.6, 0.45, 9.0, 0.6, 0.12, 2.0, 0.04); block(top, 0x5f6a7c, 14.6, 0.2, 8.2, 0.5, 0.4, 0.1, 0.02); block(top, 0x5f6a7c, 14.6, 0.2, 9.8, 0.5, 0.4, 0.1, 0.02);
