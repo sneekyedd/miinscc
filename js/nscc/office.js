@@ -403,9 +403,10 @@
         open: [{ a: -223, b: -199, kind: "window" }, { a: -151, b: -127, kind: "window" }, { a: 129, b: 153, kind: "window" }, { a: 201, b: 225, kind: "window" }] },
       { id: "east", axis: "y", t: [362, 367], from: 169, to: 549, room: -1 }, // (E's wall; the hallway has none: it carries on)
       { id: "front", axis: "x", t: [-179, -173], from: -357, to: 251.5, room: 1, added: true },    // (the model is open at the front)
-      // the wall between the office and the hallway: A's side wall, then glass and the two doors
+      // the wall between the office and the hallway: A's side wall, then glass and the front doors
+    // (the model also has a second, unused door near A: left out, the real office has only the front doors)
       { id: "hallway", axis: "y", t: [251.5, 256.8], from: -179, to: 177, room: -1,
-        open: [{ a: -9.4, b: 22.5, kind: "closed-door" }, { a: 24.6, b: 72.6, kind: "glass" }, { a: 74, b: 164, kind: "front-door" }, { a: 165.6, b: 176.6, kind: "glass" }] },
+        open: [{ a: 24.6, b: 72.6, kind: "glass" }, { a: 74, b: 164, kind: "front-door" }, { a: 165.6, b: 176.6, kind: "glass" }] },
     // (the front door: the model's frame is one door wide (101..137), but the real opening is
     // about two and a half doors wide (90 inches), so it's built that wide, around the same middle)
     ],
@@ -502,17 +503,6 @@
         wallBox(g, w, 0xcfe9d8, op.u0, op.u1, 0.12, DOOR_H - 0.05, 0, 0.06);
         wallBox(g, w, 0xffffff, op.u0, op.u1, 0, 0.12, 0, w.t);
         frame(0, DOOR_H);
-      } else if (op.kind === "closed-door") {
-        // a second door to the hallway, not used (it stays shut)
-        const lu0 = op.u0 + 0.1, lu1 = op.u1 - 0.1;
-        wallBox(g, w, 0x2f9e5b, lu0, lu1, 0.02, DOOR_H - 0.05, 0, 0.12);
-        for (const sd of [-1, 1]) {
-          wallBox(g, w, 0xc8f5d6, lu0 + 0.3, lu1 - 0.3, DOOR_H * 0.55, DOOR_H * 0.85, sd * 0.065, 0.02);
-          const p = point(w, lu1 - 0.2, sd * 0.1);
-          ball(g, 0xffcf3a, p.x, DOOR_H * 0.42, p.z, 0.08);
-        }
-        frame(0, DOOR_H);
-        wallBox(g, w, 0xffffff, op.u0 - 0.05, op.u1 + 0.05, DOOR_H - 0.02, DOOR_H + 0.1, 0, w.t + 0.06);
       }
       s = op.u1;
     }
@@ -843,12 +833,15 @@
     top.add(frontDoor);
     for (const e of [fdo.u0, fdo.u1]) slab(frontDoor, 0xffffff, DOOR.x, DOOR.h / 2, e, HW.t + 0.1, DOOR.h, 0.14);
     slab(frontDoor, 0xffffff, DOOR.x, DOOR.h + 0.06, DOOR.z, HW.t + 0.1, 0.14, DOOR.w + 0.28);
-    // double doors, standing wide open into the hallway (one hangs on each side of the doorway)
+    // double doors: they fill the doorway (meeting in the middle) and both swing open into the
+    // hallway while someone is going through (one hangs on each side of the doorway)
     const LW = DOOR.w / 2 - 0.1;
+    const leaves = [];
     for (const side of [1, -1]) { // (+1 hangs on the far end, -1 on the near end)
-      const hinge = new THREE.Group();
+      const hinge = dynamic(new THREE.Group());
       hinge.position.set(DOOR.x, 0, (side > 0 ? fdo.u1 : fdo.u0) - side * 0.07);
-      hinge.rotation.y = -side * 1.45; // (swung open, out into the hallway)
+      hinge.userData.side = side;
+      leaves.push(hinge);
       frontDoor.add(hinge);
       const m = -side * LW / 2; // (the middle of the leaf, from its hinge)
       block(hinge, 0x2f9e5b, 0, DOOR.h / 2, m, 0.14, DOOR.h - 0.06, LW, 0.06);
@@ -1198,7 +1191,7 @@
     // the starting view: square-on from the south side (the small offices nearest, the front
     // door on the right), high up, looking into the room
     const fit = { minX: FP.minX, maxX: FP.maxX, minZ: FP.minZ, maxZ: FP.maxZ };
-    let lastT = null;
+    let doorK = 0, lastT = null;
     return {
       root: top,
       bounds: B,
@@ -1228,6 +1221,10 @@
         const dt = lastT === null ? 0 : Math.max(0, Math.min(0.25, t - lastT));
         lastT = t;
         anim.forEach((a) => a(t, info));
+        // the front doors swing open (into the hallway) while someone is going through them
+        const want = info && info.door ? 1 : 0;
+        doorK = info && info.reduced ? want : doorK + (want - doorK) * (1 - Math.exp(-dt * 7));
+        for (const h of leaves) h.rotation.y = -h.userData.side * doorK * 1.45;
         const instant = !!(info && info.reduced);
         // a room door opens when someone is near it (walking through), and closes after
         const people = (info && info.people) || [];
